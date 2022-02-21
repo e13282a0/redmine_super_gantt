@@ -1,19 +1,43 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <v-app>
+      <v-main>
+        <gantt-chart>
+          <gantt-row key="2" name="kre">
+            <gantt-time-line
+              :milestones="[
+                { id: 1, date: '2022-02-23', status: 1, title: 'milestone 1' },
+                { id: 2, date: '2022-05-16', status: 0, title: 'milestone 2' },
+              ]"
+            ></gantt-time-line>
+          </gantt-row>
+          <gantt-row key="1" name="ruc">
+            <gantt-bar start="2022-02-17" end="2022-02-22"> </gantt-bar>
+            <gantt-bar start="2022-04-01" end="2022-05-07"> </gantt-bar>
+            <gantt-bar start="2022-08-01" end="2022-12-05"> </gantt-bar>
+            <gantt-bar start="2022-02-28" end="2022-02-28"> </gantt-bar>
+          </gantt-row>
+          <gantt-row key="3" name="sei"> </gantt-row>
+        </gantt-chart> </v-main
+    ></v-app>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import GanttBar from "./components/gantt/GanttBar.vue";
+import GanttChart from "./components/gantt/GanttChart.vue";
+import GanttRow from "./components/gantt/GanttRow.vue";
+import GanttTimeLine from "./components/gantt/GanttTimeLine.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
-  }
-}
+    GanttBar,
+    GanttChart,
+    GanttRow,
+    GanttTimeLine,
+  },
+};
 </script>
 
 <style>
