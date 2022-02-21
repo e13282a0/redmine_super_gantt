@@ -1,7 +1,5 @@
 <template>
   <div id="app">
-    <v-app>
-      <v-main>
         <gantt-chart>
           <gantt-row key="2" name="kre">
             <gantt-time-line
@@ -18,8 +16,7 @@
             <gantt-bar start="2022-02-28" end="2022-02-28"> </gantt-bar>
           </gantt-row>
           <gantt-row key="3" name="sei"> </gantt-row>
-        </gantt-chart> </v-main
-    ></v-app>
+        </gantt-chart>
   </div>
 </template>
 
