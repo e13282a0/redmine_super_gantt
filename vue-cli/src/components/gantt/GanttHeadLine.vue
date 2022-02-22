@@ -106,6 +106,7 @@
 </template>
 
 <script>
+import {mapState} from 'vuex';
 export default {
   data() {
     return {
@@ -116,7 +117,7 @@ export default {
     };
   },
   computed: {
-      timeBeam: function(){ return this.$store.state.timeBeam},
+      ...mapState(['timeBeam']),
       cssVars() {
       return {
         "--leftWidth": this.leftWidth + "px",

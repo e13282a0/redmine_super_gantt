@@ -11,6 +11,7 @@
 
 <script>
 import moment from 'moment';
+import {mapState} from 'vuex';
 export default {
   props: ["start", "end"],
   name: "GanttBar",
@@ -21,7 +22,7 @@ export default {
     };
   },
   computed: {
-    timeBeam: function(){ return this.$store.state.timeBeam},
+    ...mapState(['timeBeam']),
     startIndex: function () {
       let _this = this;
       return this.timeBeam.findIndex(function (elm) {

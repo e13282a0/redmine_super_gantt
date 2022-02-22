@@ -16,6 +16,7 @@
 
 <script>
 import moment from 'moment';
+import {mapState} from 'vuex';
 export default {
   //drag drop example
   //https://learnvue.co/2020/01/how-to-add-drag-and-drop-to-your-vuejs-project/#adding-drag-and-drop-functionality
@@ -29,7 +30,7 @@ export default {
     };
   },
   computed: {
-    timeBeam: function(){ return this.$store.state.timeBeam},
+    ...mapState(['timeBeam']),
     barCssVars: function () {
       let min = this.milestones.reduce(function (a, b) {
         return moment(a.date) < moment(b.date) ? a : b;

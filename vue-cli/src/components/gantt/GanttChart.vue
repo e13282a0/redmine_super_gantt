@@ -9,7 +9,7 @@
 
 <script>
 
-import { mapMutations } from 'vuex';
+import { mapMutations, mapState } from 'vuex';
 
 export default {
   props: [],
@@ -24,7 +24,7 @@ export default {
     };
   },
   computed: {
-    timeBeam: function(){ return this.$store.state.timeBeam},
+    ...mapState(['timeBeam']),
   },
   methods: {
     ...mapMutations(['makeTimeBeam']),
