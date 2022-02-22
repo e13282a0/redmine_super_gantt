@@ -16,7 +16,7 @@
 
 <script>
 import moment from 'moment';
-import {mapState} from 'vuex';
+import {mapState, mapGetters} from 'vuex'; 
 export default {
   //drag drop example
   //https://learnvue.co/2020/01/how-to-add-drag-and-drop-to-your-vuejs-project/#adding-drag-and-drop-functionality
@@ -31,6 +31,7 @@ export default {
   },
   computed: {
     ...mapState(['timeBeam']),
+    ...mapGetters(['getTimeBeamIndexByDate']),
     barCssVars: function () {
       let min = this.milestones.reduce(function (a, b) {
         return moment(a.date) < moment(b.date) ? a : b;
@@ -38,8 +39,8 @@ export default {
       let max = this.milestones.reduce(function (a, b) {
         return moment(a.date) > moment(b.date) ? a : b;
       });
-      let minIndex = this.getIndex(min.date);
-      let maxIndex = this.getIndex(max.date);
+      let minIndex = this.getTimeBeamIndexByDate(min.date);
+      let maxIndex = this.getTimeBeamIndexByDate(max.date);
       return {
         "--left": minIndex * (this.colWidth + 2) + "px",
         "--width": (maxIndex - minIndex + 1) * (this.colWidth + 4) + "px", // add 2 border pixel
@@ -48,18 +49,11 @@ export default {
   },
   methods: {
     getCssVars: function (date) {
-      let index = this.timeBeam.findIndex(function (elm) {
-        return elm.startDate >= moment(date).startOf("day");
-      });
+      let index = this.getTimeBeamIndexByDate(date)
       return {
         "--left": index * (this.colWidth + 2) + "px",
         "--height": this.rowHeight - 3 + "px",
       };
-    },
-    getIndex: function (date) {
-      return this.timeBeam.findIndex(function (elm) {
-        return elm.startDate >= moment(date).startOf("day");
-      });
     },
     startDrag(evt, item) {
       evt.dataTransfer.dropEffect = "move";

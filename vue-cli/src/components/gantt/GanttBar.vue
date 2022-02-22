@@ -10,8 +10,7 @@
 </template>
 
 <script>
-import moment from 'moment';
-import {mapState} from 'vuex';
+import {mapState, mapGetters} from 'vuex';
 export default {
   props: ["start", "end"],
   name: "GanttBar",
@@ -23,18 +22,12 @@ export default {
   },
   computed: {
     ...mapState(['timeBeam']),
+    ...mapGetters(['getTimeBeamIndexByDate']),
     startIndex: function () {
-      let _this = this;
-      return this.timeBeam.findIndex(function (elm) {
-        //console.log(moment(_this.start)+"|"+elm.startDate+"|"+elm.endDate)+"|"+moment(_this.start) >= elm.startDate+"|"+moment(_this.start) <= elm.endDate
-        return elm.startDate >= moment(_this.start).startOf("day");
-      });
+      return this.getTimeBeamIndexByDate(this.start)
     },
     endIndex: function () {
-      let _this = this;
-      return this.timeBeam.findIndex(function (elm) {
-        return elm.startDate >= moment(_this.end).endOf("day");
-      });
+      return this.getTimeBeamIndexByDate(this.end)
     },
     cssVars() {
       return {

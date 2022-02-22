@@ -7,7 +7,13 @@ export default new Vuex.Store({
   state: {
     timeBeam:[]
   },
-  getters: {},
+  getters: {
+    getTimeBeamIndexByDate:(state) => (date) => {
+      return state.timeBeam.findIndex(function (elm) {
+        return elm.startDate >= moment(date).startOf("day");
+      });
+    }
+  },
   mutations: {
     makeTimeBeam: function (state, config={days:35, weeks:48, months:12}) {
       let days = config.days;
