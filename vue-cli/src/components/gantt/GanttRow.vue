@@ -25,11 +25,11 @@ export default {
       leftWidth: this.$parent.leftWidth,
       colCount: this.$parent.colCount,
       colWidth: this.$parent.colWidth,
-      timeBeam: this.$parent.timeBeam,
       rowHeight: this.$parent.rowHeight,
     };
   },
   computed: {
+    timeBeam: function(){ return this.$store.state.timeBeam},
     cssVars() {
       return {
         "--leftWidth": this.leftWidth + "px",

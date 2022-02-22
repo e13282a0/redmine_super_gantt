@@ -16,12 +16,12 @@ export default {
   name: "GanttBar",
   data() {
     return {
-      timeBeam: this.$parent.timeBeam,
       colWidth: this.$parent.colWidth,
       rowHeight: this.$parent.rowHeight,
     };
   },
   computed: {
+    timeBeam: function(){ return this.$store.state.timeBeam},
     startIndex: function () {
       let _this = this;
       return this.timeBeam.findIndex(function (elm) {

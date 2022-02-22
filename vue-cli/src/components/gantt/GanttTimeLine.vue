@@ -3,14 +3,14 @@
     <div
       v-for="milestone in milestones"
       :style="getCssVars(milestone.date)"
-      class="gem"
+      class="milestone"
       :key="milestone.title"
       draggable
       @dragstart="startDrag($event, milestone)"
     >
-      <span class="sign">•</span> {{ milestone.title }}
+      • {{ milestone.title }}
     </div>
-    <div class="signBar" :style="barCssVars" />
+    <!--<div class="signBar" :style="barCssVars" />-->
   </div>
 </template>
 
@@ -24,12 +24,12 @@ export default {
   name: "GanttTimeLine",
   data() {
     return {
-      timeBeam: this.$parent.timeBeam,
       colWidth: this.$parent.colWidth,
       rowHeight: this.$parent.rowHeight,
     };
   },
   computed: {
+    timeBeam: function(){ return this.$store.state.timeBeam},
     barCssVars: function () {
       let min = this.milestones.reduce(function (a, b) {
         return moment(a.date) < moment(b.date) ? a : b;
@@ -41,7 +41,7 @@ export default {
       let maxIndex = this.getIndex(max.date);
       return {
         "--left": minIndex * (this.colWidth + 2) + "px",
-        "--width": (maxIndex - minIndex + 1) * (this.colWidth + 2) + "px", // add 2 border pixel
+        "--width": (maxIndex - minIndex + 1) * (this.colWidth + 4) + "px", // add 2 border pixel
       };
     },
   },
@@ -70,22 +70,23 @@ export default {
 </script>
 
 <style scoped>
-.gem {
-  z-index: 9;
+.milestone {
   cursor: move;
-  top: 2px;
+  top: 5px;
   left: var(--left);
   height: var(--height);
-  width: var(--colWidth);
+  /*width: var(--colWidth);*/
   line-height: var(--height);
   position: absolute;
+  width:200px;
+  vertical-align: middle;
+  transform-origin: left bottom;
+  transform: rotate(-5deg);
+  font-size: xx-small;
 }
 
-.sign {
-  color: red;
-  font-weight: bold;
-  font-size: 50px;
-}
+
+
 
 .signBar {
   position: absolute;
@@ -95,6 +96,7 @@ export default {
   top: 7px;
   left: var(--left);
   height: 4px;
-  width: var(--width);
+  /*width: var(--width);*/
+  
 }
 </style>
