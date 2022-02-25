@@ -28,7 +28,8 @@ export default {
       colWidth: this.$parent.colWidth,
       rowHeight: this.$parent.rowHeight,
       borderSmall: this.$parent.borderSmall,
-      borderFat:this.$parent.borderFat
+      borderFat:this.$parent.borderFat,
+      startDate: this.$parent.startDate,
     };
   },
   computed: {

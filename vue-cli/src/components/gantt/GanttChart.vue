@@ -10,7 +10,6 @@
 <script>
 
 import { mapMutations, mapState } from 'vuex';
-
 export default {
   props: [],
   name: "GanttChart",
@@ -22,7 +21,7 @@ export default {
       colWidth: 19,
       rowHeight: 18,
       borderSmall: 1,
-      borderFat:2
+      borderFat:2,
     };
   },
   computed: {

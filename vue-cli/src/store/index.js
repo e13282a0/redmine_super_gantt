@@ -29,7 +29,7 @@ export default new Vuex.Store({
     }
   },
   mutations: {
-    makeTimeBeam: function (state, config={days:35, weeks:48, months:12}) {
+    makeTimeBeam: function (state, config={ days:35, weeks:48, months:12}) {
       let days = config.days;
       let weeks = config.weeks;
       let months = config.weeks;
