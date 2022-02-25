@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <v-app><v-main>
     <gantt-chart>
       <gantt-head-line></gantt-head-line>
       <gantt-row key="2" name="kre">
@@ -35,6 +36,7 @@
         </gantt-row>
       </gantt-group>
     </gantt-chart>
+    </v-main></v-app>
   </div>
 </template>
 

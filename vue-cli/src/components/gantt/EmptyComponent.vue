@@ -8,7 +8,7 @@
     export default {
         data() {
             return {
-                key: value
+                key: 0
             }
         },
         computed: {
@@ -17,7 +17,7 @@
             }
         },
         methods: {
-            name() {
+            method() {
                 
             }
         },
