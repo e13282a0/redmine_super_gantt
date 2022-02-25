@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import moment from 'moment';
+import moment from 'moment'
 import {mapState, mapGetters} from 'vuex'; 
 export default {
   //drag drop example
@@ -31,27 +31,15 @@ export default {
   },
   computed: {
     ...mapState(['timeBeam']),
-    ...mapGetters(['getTimeBeamIndexByDate']),
-    barCssVars: function () {
-      let min = this.milestones.reduce(function (a, b) {
-        return moment(a.date) < moment(b.date) ? a : b;
-      });
-      let max = this.milestones.reduce(function (a, b) {
-        return moment(a.date) > moment(b.date) ? a : b;
-      });
-      let minIndex = this.getTimeBeamIndexByDate(min.date);
-      let maxIndex = this.getTimeBeamIndexByDate(max.date);
-      return {
-        "--left": minIndex * (this.colWidth + 2) + "px",
-        "--width": (maxIndex - minIndex + 1) * this.colWidth  + "px", // add 2 border pixel
-      };
-    },
+    ...mapGetters(['getTimeBeamIndexByDate', 'getTimeBeamPositionByDate']),
   },
   methods: {
     getCssVars: function (date) {
-      let index = this.getTimeBeamIndexByDate(date)
+      let elm = this.getTimeBeamPositionByDate(moment(date).startOf('day').hours(12), this.colWidth);
+      // eslint-disable-next-line
+      // debugger;
       return {
-        "--left": index * this.colWidth + "px",
+        "--left": (elm.index * this.colWidth) + elm.offset -3 + "px", // subtract 3 px for font width of mark
         "--height": this.rowHeight - 3 + "px",
       };
     },

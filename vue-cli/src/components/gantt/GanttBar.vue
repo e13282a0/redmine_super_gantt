@@ -11,8 +11,9 @@
 
 <script>
 import {mapState, mapGetters} from 'vuex';
+import moment from 'moment'
 export default {
-  props: ["start", "end"],
+  props: ["start_date", "end_date"],
   name: "GanttBar",
   data() {
     return {
@@ -22,21 +23,22 @@ export default {
   },
   computed: {
     ...mapState(['timeBeam']),
-    ...mapGetters(['getTimeBeamIndexByDate']),
-    startIndex: function () {
-      return this.getTimeBeamIndexByDate(this.start)
+    ...mapGetters(['getTimeBeamIndexByDate','getTimeBeamPositionByDate']),
+    start: function () {
+      return this.getTimeBeamPositionByDate(moment(this.start_date).startOf('day'), this.colWidth);
+      //return this.getTimeBeamIndexByDate(this.start)
     },
-    endIndex: function () {
-      return this.getTimeBeamIndexByDate(this.end)
+    end: function () {
+      return this.getTimeBeamPositionByDate(moment(this.end_date).endOf('day'), this.colWidth);
+      //return this.getTimeBeamIndexByDate(this.end)
     },
     cssVars() {
       return {
-        "--startIndex": this.startIndex,
-        "--endIndex": this.endIndex,
-        "--left": this.startIndex * this.colWidth  + "px",
-        "--width":
-          (this.endIndex - this.startIndex) * this.colWidth  + "px",
-        "--height": this.rowHeight - 4 + "px",
+        "--startIndex": this.start.index,
+        "--endIndex": this.end.index,
+        "--left": (this.start.index * this.colWidth)+this.start.offset  + "px",
+        "--width": ((this.end.index - this.start.index) * this.colWidth)+this.end.offset  + "px",
+        "--height": this.rowHeight - 3 + "px",
       };
     },
   },
@@ -64,6 +66,7 @@ export default {
   min-width: var(--colWidth);
   line-height: var(--height);
   font-size: xx-small;
+  border:0;
 }
 
 /*Drgable */

@@ -12,6 +12,20 @@ export default new Vuex.Store({
       return state.timeBeam.findIndex(function (elm) {
         return elm.startDate >= moment(date).startOf("day");
       });
+    },
+    getTimeBeamPositionByDate:(state) => (date,width) => {
+      let index = state.timeBeam.findIndex(function (elm) {
+        return elm.startDate >= moment(date).startOf("day");
+      });
+      if (index === -1)
+      return {'index':-1, 'offset':0};
+ 
+      let timeSpan = Math.round(state.timeBeam[index].endDate.diff(state.timeBeam[index].startDate, 'hours')/24);
+      let hours = moment(date).diff(state.timeBeam[index].startDate, 'hours');
+      let offset = Math.round(width*((hours/timeSpan)/24));
+      // eslint-disable-next-line
+      //debugger;
+      return {'index':index, 'offset':offset};
     }
   },
   mutations: {
