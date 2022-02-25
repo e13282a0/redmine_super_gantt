@@ -1,5 +1,6 @@
 <template>
   <div>
+      <gantt-row name="group header"> </gantt-row>
     <slot />
   </div>
 </template>
@@ -7,6 +8,7 @@
 <script>
 import { mapState } from "vuex";
 export default {
+    name: "GanttGroup",
   data() {
     return {
       leftWidth: this.$parent.leftWidth,
