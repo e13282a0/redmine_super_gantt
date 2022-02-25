@@ -33,10 +33,10 @@ export default {
       return {
         "--startIndex": this.startIndex,
         "--endIndex": this.endIndex,
-        "--left": this.startIndex * (this.colWidth + 2) + "px",
+        "--left": this.startIndex * this.colWidth  + "px",
         "--width":
-          (this.endIndex - this.startIndex) * (this.colWidth + 2) + "px", // add 2 border pixel
-        "--height": this.rowHeight - 3 + "px",
+          (this.endIndex - this.startIndex) * this.colWidth  + "px",
+        "--height": this.rowHeight - 4 + "px",
       };
     },
   },

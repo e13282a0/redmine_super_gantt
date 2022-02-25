@@ -8,7 +8,7 @@
       draggable
       @dragstart="startDrag($event, milestone)"
     >
-      • {{ milestone.title }}
+      o {{ milestone.title }}
     </div>
     <!--<div class="signBar" :style="barCssVars" />-->
   </div>
@@ -43,7 +43,7 @@ export default {
       let maxIndex = this.getTimeBeamIndexByDate(max.date);
       return {
         "--left": minIndex * (this.colWidth + 2) + "px",
-        "--width": (maxIndex - minIndex + 1) * (this.colWidth + 4) + "px", // add 2 border pixel
+        "--width": (maxIndex - minIndex + 1) * this.colWidth  + "px", // add 2 border pixel
       };
     },
   },
@@ -51,7 +51,7 @@ export default {
     getCssVars: function (date) {
       let index = this.getTimeBeamIndexByDate(date)
       return {
-        "--left": index * (this.colWidth + 2) + "px",
+        "--left": index * this.colWidth + "px",
         "--height": this.rowHeight - 3 + "px",
       };
     },
@@ -66,6 +66,7 @@ export default {
 
 <style scoped>
 .milestone {
+  display: inline;
   cursor: move;
   top: 5px;
   left: var(--left);
@@ -75,10 +76,11 @@ export default {
   position: absolute;
   width:200px;
   vertical-align: middle;
+  font-size: xx-small;
   transform-origin: left bottom;
   transform: rotate(-5deg);
-  font-size: xx-small;
 }
+
 
 
 

@@ -114,6 +114,8 @@ export default {
       colCount: this.$parent.colCount,
       colWidth: this.$parent.colWidth,
       rowHeight: this.$parent.rowHeight,
+      borderSmall: this.$parent.borderSmall,
+      borderFat:this.$parent.borderFat
     };
   },
   computed: {
@@ -121,8 +123,10 @@ export default {
       cssVars() {
       return {
         "--leftWidth": this.leftWidth + "px",
-        "--colWidth": this.colWidth + 2 + "px", // add 2 border pixel
+        "--colWidth": this.colWidth + "px", 
         "--rowHeight": this.rowHeight + "px",
+        "--borderSmall": this.borderSmall + "px",
+        "--borderFat": this.borderFat + "px",
       };
     },
   }
@@ -157,24 +161,24 @@ export default {
 
 .col {
   float: left;
-  width: var(--colWidth); /* subtract border width*/
+  width: calc(var(--colWidth) - var(--borderFat)); /* subtract border width*/
   font-size: x-small;
   height: var(--rowHeight);
   vertical-align: top;
   line-height: 14px;
-  padding: 0 0 0 2px;
+  padding: 0 0 0 var(--borderFat);
   border-top: 1px solid #ccc;
   border-bottom: 1px solid #ccc;
 }
 
 .borderLeft {
-  padding: 0 0 0 1px;
-  border-left: 1px solid #ccc;
+  padding: 0 0 0 calc(var(--borderFat) - var(--borderSmall));
+  border-left: var(--borderSmall) solid #ccc;
 }
 
 .fatBorderLeft {
   padding: 0;
-  border-left: 2px solid #aaa;
+  border-left: var(--borderFat) solid #aaa;
 }
 
 

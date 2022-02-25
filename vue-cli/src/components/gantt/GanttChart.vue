@@ -19,8 +19,10 @@ export default {
     return {
       leftWidth: 200,
       colCount: 90,
-      colWidth: 17,
+      colWidth: 19,
       rowHeight: 18,
+      borderSmall: 1,
+      borderFat:2
     };
   },
   computed: {
