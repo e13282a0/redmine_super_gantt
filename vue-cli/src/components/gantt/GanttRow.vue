@@ -30,6 +30,7 @@ export default {
       borderSmall: this.$parent.borderSmall,
       borderFat:this.$parent.borderFat,
       startDate: this.$parent.startDate,
+      actDepth: this.$parent.actDepth,
     };
   },
   computed: {

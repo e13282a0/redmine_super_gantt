@@ -1,5 +1,5 @@
 <template>
-  <div :style="cssVars" class="main" >
+  <div :style="cssVars" class="main">
     <!-- year -->
     <div class="headline">
       <div class="left"></div>
@@ -102,11 +102,10 @@
       </div>
     </div>
   </div>
-  
 </template>
 
 <script>
-import {mapState} from 'vuex';
+import { mapState } from "vuex";
 export default {
   data() {
     return {
@@ -115,21 +114,21 @@ export default {
       colWidth: this.$parent.colWidth,
       rowHeight: this.$parent.rowHeight,
       borderSmall: this.$parent.borderSmall,
-      borderFat:this.$parent.borderFat
+      borderFat: this.$parent.borderFat,
     };
   },
   computed: {
-      ...mapState(['timeBeam']),
-      cssVars() {
+    ...mapState(["timeBeam"]),
+    cssVars() {
       return {
         "--leftWidth": this.leftWidth + "px",
-        "--colWidth": this.colWidth + "px", 
+        "--colWidth": this.colWidth + "px",
         "--rowHeight": this.rowHeight + "px",
         "--borderSmall": this.borderSmall + "px",
         "--borderFat": this.borderFat + "px",
       };
     },
-  }
+  },
 };
 </script>
 
@@ -180,6 +179,4 @@ export default {
   padding: 0;
   border-left: var(--borderFat) solid #aaa;
 }
-
-
 </style>

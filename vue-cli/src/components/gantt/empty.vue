@@ -1,20 +1,28 @@
 <template>
-  <div>
-      hallo
-  </div>
+    <div>
+
+    </div>
 </template>
 
 <script>
-module.exports = {
-  props: ["series", "title"],
-  data() {
-    return {
-
-    };
-  },
-  computed: {},
-  methods: {},
-};
+    export default {
+        data() {
+            return {
+                key: value
+            }
+        },
+        computed: {
+            name() {
+                return this.data 
+            }
+        },
+        methods: {
+            name() {
+                
+            }
+        },
+        
+    }
 </script>
 
 <style scoped>

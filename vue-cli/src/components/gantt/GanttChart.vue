@@ -22,6 +22,7 @@ export default {
       rowHeight: 18,
       borderSmall: 1,
       borderFat:2,
+      actDepth:0,
     };
   },
   computed: {
