@@ -18,7 +18,7 @@
       </gantt-row>
       <gantt-row key="3" name="sei"> </gantt-row>
 
-      <gantt-group>
+      <gantt-group title = "Group 1">
         <gantt-row key="4" name="group elm 1">
           <gantt-bar start_date="2022-02-28" end_date="2022-02-28"> </gantt-bar>
           <gantt-bar start_date="2022-04-01" end_date="2022-05-07"> </gantt-bar>
