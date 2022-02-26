@@ -16,6 +16,7 @@
           class="col"
           :class="[elm.majorSeparator ? 'fatBorderLeft' : 'borderLeft']"
         ></div>
+        <gantt-time-line :milestones="milestones"></gantt-time-line>
       </div>
     </div>
     <!-- content -->
@@ -29,7 +30,7 @@
 import { mapState } from "vuex";
 export default {
   name: "GanttGroup",
-  props: ["title"],
+  props: ["title","milestones"],
   data() {
     return {
       leftWidth: this.$parent.leftWidth,
