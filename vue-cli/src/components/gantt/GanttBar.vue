@@ -63,7 +63,7 @@ export default {
   left: var(--left);
   height: var(--height);
   width: var(--width);
-  min-width: var(--colWidth);
+  /*min-width: var(--colWidth);*/
   line-height: var(--height);
   font-size: xx-small;
   border:0;

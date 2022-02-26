@@ -21,8 +21,8 @@ export default new Vuex.Store({
       return {'index':-1, 'offset':0};
  
       let timeSpan = Math.round(state.timeBeam[index].endDate.diff(state.timeBeam[index].startDate, 'hours')/24);
-      let hours = moment(date).diff(state.timeBeam[index].startDate, 'hours');
-      let offset = Math.round(width*((hours/timeSpan)/24));
+      let minutes = moment(date).diff(state.timeBeam[index].startDate, 'minutes');
+      let offset = Math.round(width*((minutes/timeSpan)/(24*60)));
       // eslint-disable-next-line
       //debugger;
       return {'index':index, 'offset':offset};

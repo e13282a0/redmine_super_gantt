@@ -80,7 +80,7 @@ export default {
 
 .col {
   float: left;
-  width: calc(var(--colWidth) - var(--borderFat)); /* subtract border width*/
+  width: var(--colWidth); /* subtract border width*/
   font-size: x-small;
   height: var(--rowHeight);
   vertical-align: top;
