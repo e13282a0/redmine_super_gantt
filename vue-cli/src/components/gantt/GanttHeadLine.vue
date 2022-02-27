@@ -77,7 +77,7 @@
       <div class="right">
         <div
           class="col"
-          :class="[elm.majorSeparator ? 'fatBorderLeft' : 'borderLeft']"
+          :class="[elm.majorSeparator ? 'fatBorderLeft' : 'borderLeft',  isToday(elm.startDate) ? 'today':(elm.type == 'day') &&isWeekend(elm.startDate) ? 'weekend':'', ]"
           v-for="elm in timeBeam"
           :key="'date' + elm.startDate"
         >
@@ -91,7 +91,7 @@
       <div class="right">
         <div
           class="col"
-          :class="[elm.majorSeparator ? 'fatBorderLeft' : 'borderLeft']"
+          :class="[elm.majorSeparator ? 'fatBorderLeft' : 'borderLeft', isToday(elm.startDate) ? 'today':(elm.type == 'day') &&isWeekend(elm.startDate) ? 'weekend':'', ]"
           v-for="elm in timeBeam"
           :key="'day' + elm.startDate"
         >
@@ -106,6 +106,7 @@
 
 <script>
 import { mapState } from "vuex";
+import moment from 'moment'
 export default {
   data() {
     return {
@@ -129,6 +130,15 @@ export default {
       };
     },
   },
+  methods:{
+    isToday:function(date) {
+      let diff = moment().diff(date, 'hours');
+      return diff > 0 && diff < 24
+    },
+    isWeekend:function(date) {
+      return date.isoWeekday()>5
+    }
+  }
 };
 </script>
 
@@ -178,5 +188,13 @@ export default {
 .fatBorderLeft {
   padding: 0;
   border-left: var(--borderFat) solid #aaa;
+}
+
+.today {
+  background-color: lightgreen;
+}
+
+.weekend {
+  background-color: lightgray;
 }
 </style>
