@@ -32,7 +32,7 @@ export default {
       borderSmall: this.$parent.borderSmall,
       borderFat:this.$parent.borderFat,
       startDate: this.$parent.startDate,
-      actDepth: this.$parent.actDepth,
+      actDepth: this.$parent.actDepth+1,
     };
   },
   computed: {
@@ -44,6 +44,7 @@ export default {
         "--rowHeight": this.rowHeight + "px",
         "--borderSmall": this.borderSmall + "px",
         "--borderFat": this.borderFat + "px",
+        "--paddingLeft" : this.actDepth*12+10+"px"
       };
     },
   },
@@ -68,6 +69,9 @@ export default {
   float: left;
   width: var(--leftWidth);
   height: var(--rowHeight);
+  padding-left: var(--paddingLeft);
+  vertical-align: middle;
+  line-height: var(--rowHeight);
 }
 .right {
   width: calc(100% - var(--leftWidth));

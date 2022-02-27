@@ -8,23 +8,15 @@
       :milestones="project.milestones"
       :start_date="getStartEndForSubIssues(project.issues).startDate"
       :end_date="getStartEndForSubIssues(project.issues).endDate"
-    >
-    
-      <gantt-row
-        v-for="i in project.issues"
-        :key="'issue' + i.id"
-        :name="i.subject"
-      >
-        <gantt-bar :start_date="i.start_date" :end_date="i.due_date" />
- 
-      </gantt-row>
-    </gantt-group>
+      :issues="project.issues"
+    />
+      
   </div>
 </template>
 
 <script>
 import { mapMutations, mapState } from "vuex";
-import moment from 'moment'
+import moment from "moment";
 export default {
   props: ["ganttdata"],
   name: "GanttChart",
@@ -47,12 +39,20 @@ export default {
   },
   methods: {
     ...mapMutations(["makeTimeBeam"]),
-    getStartEndForSubIssues:function(children) {
-      let start = children.reduce((prev, curr) => moment(prev.start_date) < moment(curr.start_date) ? prev : curr);
-      let end = children.reduce((prev, curr) => moment(prev.due_date) > moment(curr.due_date) ? prev : curr);
-      return {'startDate':start.start_date, 'endDate':end.due_date};
-
-    }
+    getStartEndForSubIssues: function (issues) {
+      function _flatIssues(_issues) {
+        let result=[];
+        _issues.forEach(_issue => {
+          result.push(_issue);
+          result = result.concat(_flatIssues(_issue.sub_issues))
+        });
+        return result;
+      }
+      let allIssues = _flatIssues(issues)
+      let start = allIssues.reduce((prev, curr) => (moment(prev.start_date) < moment(curr.start_date) ? prev : curr));
+      let end = allIssues.reduce((prev, curr) => (moment(prev.due_date) > moment(curr.due_date) ? prev : curr));
+      return { startDate: start.start_date, endDate: end.due_date };
+    },
   },
   mounted: function () {
     this.makeTimeBeam({
@@ -109,7 +109,7 @@ export default {
 }
 
 .fatBorderBottom {
-  border-bottom: var(--borderFat)solid #ccc;
+  border-bottom: var(--borderFat) solid #ccc;
 }
 
 .borderLeft {
@@ -123,11 +123,11 @@ export default {
 }
 
 .today {
-  background-color: lightgreen;
+  background-color: rgb(166, 255, 166);
 }
 
 .weekend {
-  background-color: lightgray;
+  background-color: rgb(230, 230, 230);
 }
 
 .hover:hover {

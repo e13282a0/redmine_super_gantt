@@ -36,7 +36,7 @@ export default {
         "--startIndex": this.start.index,
         "--endIndex": this.end.index,
         "--left": (this.start.index * this.colWidth)+this.start.offset  + "px",
-        "--width": ((this.end.index - this.start.index) * this.colWidth)+this.end.offset  + "px",
+        "--width": ((this.end.index - this.start.index) * this.colWidth)+this.end.offset-this.start.offset  + "px",
         "--height": this.rowHeight - 3 + "px",
       };
     },
