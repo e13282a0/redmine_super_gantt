@@ -5,7 +5,6 @@
     draggable
     @dragstart="startDrag($event, start)"
   >
-    gallo
   </div>
 </template>
 

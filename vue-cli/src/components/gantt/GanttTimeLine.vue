@@ -54,6 +54,7 @@ export default {
 
 <style scoped>
 .milestone {
+  z-index: 50;
   display: inline;
   cursor: move;
   top: 5px;

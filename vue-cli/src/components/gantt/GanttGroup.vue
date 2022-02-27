@@ -15,7 +15,8 @@
           :key="'col' + elm.startDate"
           class="col"
           :class="[elm.majorSeparator ? 'fatBorderLeft' : 'borderLeft']"
-        ></div>
+        />
+        <gantt-bar :start_date="start_date" :end_date="end_date" />
         <gantt-time-line :milestones="milestones"></gantt-time-line>
       </div>
     </div>
@@ -30,7 +31,7 @@
 import { mapState } from "vuex";
 export default {
   name: "GanttGroup",
-  props: ["title","milestones"],
+  props: ["title","milestones","start_date", "end_date"],
   data() {
     return {
       leftWidth: this.$parent.leftWidth,
