@@ -5,7 +5,7 @@
       <div class="left"></div>
       <div class="right">
         <div
-          class="col"
+          class="col borderTop borderBottom"
           :class="[
             elm.majorSeparator
               ? 'fatBorderLeft'
@@ -28,7 +28,7 @@
       <div class="left"></div>
       <div class="right">
         <div
-          class="col"
+          class="col borderTop borderBottom"
           :class="[
             elm.majorSeparator
               ? 'fatBorderLeft'
@@ -51,7 +51,7 @@
       <div class="left"></div>
       <div class="right">
         <div
-          class="col"
+          class="col borderTop borderBottom"
           :class="[
             elm.majorSeparator
               ? 'fatBorderLeft'
@@ -76,7 +76,7 @@
       <div class="left"></div>
       <div class="right">
         <div
-          class="col"
+          class="col borderTop borderBottom"
           :class="[elm.majorSeparator ? 'fatBorderLeft' : 'borderLeft',  isToday(elm.startDate) ? 'today':(elm.type == 'day') &&isWeekend(elm.startDate) ? 'weekend':'', ]"
           v-for="elm in timeBeam"
           :key="'date' + elm.startDate"
@@ -90,7 +90,7 @@
       <div class="left"></div>
       <div class="right">
         <div
-          class="col"
+          class="col borderTop fatBorderBottom"
           :class="[elm.majorSeparator ? 'fatBorderLeft' : 'borderLeft', isToday(elm.startDate) ? 'today':(elm.type == 'day') &&isWeekend(elm.startDate) ? 'weekend':'', ]"
           v-for="elm in timeBeam"
           :key="'day' + elm.startDate"
@@ -106,8 +106,9 @@
 
 <script>
 import { mapState } from "vuex";
-import moment from 'moment'
+import formatter from '../../mixins/formatter.js'
 export default {
+  mixins:[formatter],
   data() {
     return {
       leftWidth: this.$parent.leftWidth,
@@ -131,70 +132,11 @@ export default {
     },
   },
   methods:{
-    isToday:function(date) {
-      let diff = moment().diff(date, 'hours');
-      return diff > 0 && diff < 24
-    },
-    isWeekend:function(date) {
-      return date.isoWeekday()>5
-    }
+    
   }
 };
 </script>
 
 <style scoped>
-.main {
-  width: 100%;
-}
 
-.headline {
-  display: block;
-  height: 14px;
-  overflow: hidden;
-  z-index: 2;
-}
-.left {
-  float: left;
-  width: var(--leftWidth);
-  height: var(--rowHeight);
-  font-size: x-small;
-  padding: 0;
-  text-align: right;
-  line-height: 14px;
-}
-.right {
-  width: calc(100% - var(--leftWidth));
-  float: left;
-  height: 14px;
-}
-
-.col {
-  float: left;
-  width: var(--colWidth); /* subtract border width*/
-  font-size: x-small;
-  height: var(--rowHeight);
-  vertical-align: top;
-  line-height: 14px;
-  padding: 0 0 0 var(--borderFat);
-  border-top: 1px solid #ccc;
-  border-bottom: 1px solid #ccc;
-}
-
-.borderLeft {
-  padding: 0 0 0 calc(var(--borderFat) - var(--borderSmall));
-  border-left: var(--borderSmall) solid #ccc;
-}
-
-.fatBorderLeft {
-  padding: 0;
-  border-left: var(--borderFat) solid #aaa;
-}
-
-.today {
-  background-color: lightgreen;
-}
-
-.weekend {
-  background-color: lightgray;
-}
 </style>

@@ -5,8 +5,8 @@
       <div
         v-for="elm in timeBeam"
         :key="'col' + elm.startDate"
-        class="col"
-        :class="[elm.majorSeparator ? 'fatBorderLeft' : 'borderLeft']"
+        class="col borderTop hover"
+        :class="[elm.majorSeparator ? 'fatBorderLeft' : 'borderLeft',  isToday(elm.startDate) ? 'today':(elm.type == 'day') &&isWeekend(elm.startDate) ? 'weekend':'', ]"
         @drop="onDrop($event, 1)"
         @dragover.prevent
         @dragenter.prevent
@@ -18,7 +18,9 @@
 
 <script>
 import {mapState} from 'vuex';
+import formatter from '../../mixins/formatter.js'
 export default {
+  mixins:[formatter],
   props: ["name"],
   name: "GanttRow",
   data() {
@@ -74,28 +76,4 @@ export default {
   position: relative;
 }
 
-.col:hover {
-  background-color: #eee;
-}
-
-.col {
-  float: left;
-  width: var(--colWidth); /* subtract border width*/
-  font-size: x-small;
-  height: var(--rowHeight);
-  vertical-align: top;
-  line-height: 14px;
-  padding: 0 0 0 var(--borderFat);
-  border-top: 1px solid #ccc;
-}
-
-.borderLeft {
-  padding: 0 0 0 calc(var(--borderFat) - var(--borderSmall));
-  border-left: var(--borderSmall) solid #ccc;
-}
-
-.fatBorderLeft {
-  padding: 0;
-  border-left: var(--borderFat) solid #aaa;
-}
 </style>

@@ -64,4 +64,73 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style>
+.main {
+  width: 100%;
+}
+
+.headline {
+  display: block;
+  height: 14px;
+  overflow: hidden;
+  z-index: 2;
+}
+.left {
+  float: left;
+  width: var(--leftWidth);
+  height: var(--rowHeight);
+  font-size: x-small;
+  padding: 0;
+  text-align: left;
+  line-height: 14px;
+}
+.right {
+  width: calc(100% - var(--leftWidth));
+  float: left;
+  height: 14px;
+}
+
+.col {
+  float: left;
+  width: var(--colWidth); /* subtract border width*/
+  font-size: x-small;
+  height: var(--rowHeight);
+  vertical-align: top;
+  line-height: 14px;
+  padding: 0 0 0 var(--borderFat);
+}
+
+.borderTop {
+  border-top: var(--borderSmall) solid #ccc;
+}
+
+.borderBottom {
+  border-bottom: var(--borderSmall) solid #ccc;
+}
+
+.fatBorderBottom {
+  border-bottom: var(--borderFat)solid #ccc;
+}
+
+.borderLeft {
+  padding: 0 0 0 calc(var(--borderFat) - var(--borderSmall));
+  border-left: var(--borderSmall) solid #ccc;
+}
+
+.fatBorderLeft {
+  padding: 0;
+  border-left: var(--borderFat) solid #aaa;
+}
+
+.today {
+  background-color: lightgreen;
+}
+
+.weekend {
+  background-color: lightgray;
+}
+
+.hover:hover {
+  background-color: lightgray;
+}
+</style>
