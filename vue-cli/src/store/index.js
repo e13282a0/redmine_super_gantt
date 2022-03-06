@@ -15,15 +15,16 @@ export default new Vuex.Store({
   },
   getters: {
     getTimeBeamIndexByDate: (state) => (date) => {
-      return state.timeBeam.findIndex(function (elm) {
+      let index = state.timeBeam.findIndex(function (elm) {
         return elm.startDate >= moment(date).startOf("day");
       });
+      return index < 0 ? 0 : index;
     },
     getTimeBeamPositionByDate: (state) => (date, width) => {
       let index = state.timeBeam.findIndex(function (elm) {
         return elm.startDate >= moment(date).startOf("day");
       });
-      if (index === -1) return { index: -1, offset: 0 };
+      if (index < 0) return { index: 0, offset: 0 };
 
       let timeSpan = Math.round(state.timeBeam[index].endDate.diff(state.timeBeam[index].startDate, "minutes"));
       let minutes = moment(date).diff(state.timeBeam[index].startDate, "minutes");

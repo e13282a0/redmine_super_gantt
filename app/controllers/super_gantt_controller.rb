@@ -42,6 +42,13 @@ class SuperGanttController < ApplicationController
     _issues_sorted = _issues.sort_by(&:status_id)
     _issues_sorted.each_with_index do |_issue, i| 
       result_elm=_issue.attributes
+
+      hour_diff = _issue.total_estimated_hours != nil ? _issue.total_estimated_hours-_issue.total_spent_hours : 0
+      calc_due_date = hour_diff > 0 ? Date.today + (hour_diff)/7 : nil
+      
+      result_elm["due_date"] = result_elm["due_date"] == nil ? calc_due_date == nil ? result_elm["start_date"] : calc_due_date : result_elm["due_date"]
+      result_elm["due_date"] = result_elm["due_date"] < Date.today ? Date.today+1 : result_elm["due_date"];
+      #result_elm["start_date"] = result_elm["start_date"] < Date.today ? Date.today : result_elm["start_date"];
       result_elm["spent_hours"] = _issue.spent_hours
       result_elm["total_spent_hours"] = _issue.total_spent_hours
       result_elm["total_estimated_hours"] = _issue.total_estimated_hours

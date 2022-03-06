@@ -18,7 +18,6 @@
 import { mapMutations, mapState } from "vuex";
 import moment from "moment";
 export default {
-  props: ["ganttdata"],
   name: "GanttChart",
   data() {
     return {
@@ -32,11 +31,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["timeBeam"]),
-    projects: function () {
-      //return this.ganttdata;
-      return this.$store.state.projects
-    },
+    ...mapState(["timeBeam", "projects"]),
   },
   methods: {
     ...mapMutations(["makeTimeBeam"]),

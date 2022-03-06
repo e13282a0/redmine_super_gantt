@@ -32,11 +32,13 @@ export default {
       //return this.getTimeBeamIndexByDate(this.end)
     },
     cssVars() {
+      let left = Math.max((this.start.index * this.colWidth)+this.start.offset,0);
+      let width = Math.max(((this.end.index - this.start.index) * this.colWidth)+this.end.offset-this.start.offset,0);
       return {
         "--startIndex": this.start.index,
         "--endIndex": this.end.index,
-        "--left": (this.start.index * this.colWidth)+this.start.offset  + "px",
-        "--width": ((this.end.index - this.start.index) * this.colWidth)+this.end.offset-this.start.offset  + "px",
+        "--left": left  + "px",
+        "--width": width  + "px",
         "--height": this.rowHeight - 3 + "px",
       };
     },

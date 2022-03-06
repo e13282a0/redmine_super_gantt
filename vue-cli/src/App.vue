@@ -4,7 +4,7 @@
       <v-main>
         <v-progress-linear indeterminate v-if="!isInit.projects"></v-progress-linear>
 
-        <gantt-chart :ganttdata="chartData" v-else> </gantt-chart>
+        <gantt-chart v-else> </gantt-chart>
       </v-main>
     </v-app>
   </div>
@@ -21,8 +21,8 @@ export default {
           id: 1,
           name: "testproject1",
           milestones: [
-            { id: 1, date: "2022-02-23", status: 1, title: "milestone 1" },
-            { id: 2, date: "2022-05-22", status: 0, title: "milestone 2" },
+            { id: 1, effective_date: "2022-02-23", status: 1, title: "milestone 1" },
+            { id: 2, effective_date: "2022-05-22", status: 0, title: "milestone 2" },
           ],
           issues: [
             {
