@@ -26,7 +26,7 @@ class SuperGanttController < ApplicationController
     project_entry = project.attributes
     project_entry["issues"]= make_nodes(top_level_issues)
     versions = Version.where(:project_id => project.id)
-    project_entry["milesstones"] = versions.map(&:attributes)
+    project_entry["milestones"] = versions.map(&:attributes)
     project_entry["sub_projects"]=[]
     sub_projects = Project.where(:parent_id => project.id).to_a()
     sub_projects.each_with_index do |sub_project, i| 

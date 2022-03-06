@@ -4,11 +4,11 @@
       v-for="milestone in milestones"
       :style="getCssVars(milestone.effective_date)"
       class="milestone"
-      :key="milestone.title"
+      :key="milestone.name"
       draggable
       @dragstart="startDrag($event, milestone)"
     >
-      o {{ milestone.title }}
+      o {{ milestone.name }}
     </div>
     <!--<div class="signBar" :style="barCssVars" />-->
   </div>
