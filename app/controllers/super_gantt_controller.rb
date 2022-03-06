@@ -22,7 +22,7 @@ class SuperGanttController < ApplicationController
 
   def make_project_entry(project)
     project_entry = Hash.new
-    top_level_issues = Issue.where( :project_id => project.id)
+    top_level_issues = Issue.where( :project_id => project.id, :parent_id => nil)
     project_entry = project.attributes
     project_entry["issues"]= make_nodes(top_level_issues)
     versions = Version.where(:project_id => project.id)
@@ -45,13 +45,6 @@ class SuperGanttController < ApplicationController
       result_elm["spent_hours"] = _issue.spent_hours
       result_elm["total_spent_hours"] = _issue.total_spent_hours
       result_elm["total_estimated_hours"] = _issue.total_estimated_hours
-      #result_elm=Hash.new
-      #result_elm["name"]=_issue.subject
-      #result_elm["value"]=_issue.total_spent_hours
-      #result_elm["status"]= _issue.status_id.blank? ? nil : IssueStatus.find(_issue.status_id)["name"]
-      #result_elm["is_open"]= _issue.status_id.blank? ? true : _issue.status_id < 2
-      #result_elm["is_closed"]= _issue.status_id.blank? ? nil : IssueStatus.find(_issue.status_id)["is_closed"]
-      #result_elm["assignee"] = _issue.assigned_to.blank? ? nil : _issue.assigned_to["lastname"]
       children = get_child_issues(_issue.id)
       result_elm["sub_issues"] = children.to_a.length > 0 ? make_nodes(children) : []
       result.push(result_elm)

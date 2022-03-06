@@ -2,7 +2,7 @@
   <div>
     <div
       v-for="milestone in milestones"
-      :style="getCssVars(milestone.date)"
+      :style="getCssVars(milestone.effective_date)"
       class="milestone"
       :key="milestone.title"
       draggable

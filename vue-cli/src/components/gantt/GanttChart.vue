@@ -34,7 +34,8 @@ export default {
   computed: {
     ...mapState(["timeBeam"]),
     projects: function () {
-      return this.ganttdata;
+      //return this.ganttdata;
+      return this.$store.state.projects
     },
   },
   methods: {
