@@ -1,6 +1,6 @@
 <template>
   <div>
-    <gantt-row :name="title" expandable="1" v-model="showSlots">
+    <gantt-row :name="title" expandable="1" v-model="showSlots" :act_depth="actDepth">
       <gantt-bar :start_date="start_date" :end_date="end_date" />
       <gantt-time-line :milestones="milestones"></gantt-time-line>
     </gantt-row>
@@ -14,27 +14,37 @@
       <!-- draw child issues -->
       <template v-for="issue in issues">
         <!-- issue is a leave -->
-        <gantt-row v-if="issue.sub_issues.length === 0" :key="'issue' + issue.id" :name="issue.subject">
+        <gantt-row v-if="issue.sub_issues.length === 0" :key="'issue' + issue.id" :name="issue.subject" :act_depth="actDepth+1">
           <gantt-bar :start_date="issue.start_date" :end_date="issue.due_date" />
         </gantt-row>
         <!-- issue is a node -->
-        <gantt-group v-else :key="'group' + issue.id" :title="issue.subject" :start_date="getStartEndForSubIssues(issue.sub_issues).startDate" :end_date="getStartEndForSubIssues(issue.sub_issues).endDate" :issues="issue.sub_issues" />
+        <gantt-group :act_depth="actDepth+1" v-else :key="'group' + issue.id" :title="issue.subject" :start_date="getStartEndForSubIssues(issue.sub_issues).startDate" :end_date="getStartEndForSubIssues(issue.sub_issues).endDate" :issues="issue.sub_issues" />
       </template>
 
       <!-- draw sub projects -->
       <template v-for="sub_project in sub_projects">
-        <gantt-row :key="'project' + sub_project.id" :name="sub_project.name" expandable="1" v-model="showSlots">
+        <gantt-row :key="'project' + sub_project.id" :name="sub_project.name" expandable="1" v-model="showChildSlots[sub_project.id]" :act_depth="actDepth+1">
           <gantt-bar :start_date="start_date" :end_date="end_date" />
           <gantt-time-line :milestones="milestones"></gantt-time-line>
         </gantt-row>
-        <template v-for="sub_project_issue in sub_project.issues">
-          <!-- issue is a leave -->
-          <gantt-row v-if="sub_project_issue.sub_issues.length === 0" :key="'issue' + sub_project_issue.id" :name="sub_project_issue.subject">
-            <gantt-bar :start_date="sub_project_issue.start_date" :end_date="sub_project_issue.due_date" />
-          </gantt-row>
-          <!-- issue is a node -->
-          <gantt-group v-else :key="'group' + sub_project_issue.id" :title="sub_project_issue.subject" :start_date="getStartEndForSubIssues(sub_project_issue.sub_issues).startDate" :end_date="getStartEndForSubIssues(sub_project_issue.sub_issues).endDate" :issues="sub_project_issue.sub_issues" />
-        </template>
+        <div :key="'sub_issues' + sub_project.id" v-if="showChildSlots[sub_project.id] && sub_project.issues.length > 0">
+          <template v-for="sub_project_issue in sub_project.issues">
+            <!-- issue is a leave -->
+            <gantt-row v-if="sub_project_issue.sub_issues.length === 0" :key="'issue' + sub_project_issue.id" :name="sub_project_issue.subject" :act_depth="actDepth+1">
+              <gantt-bar :start_date="sub_project_issue.start_date" :end_date="sub_project_issue.due_date" />
+            </gantt-row>
+            <!-- issue is a node -->
+            <gantt-group
+              v-else
+              :key="'group' + sub_project_issue.id"
+              :title="sub_project_issue.subject"
+              :start_date="getStartEndForSubIssues(sub_project_issue.sub_issues).startDate"
+              :end_date="getStartEndForSubIssues(sub_project_issue.sub_issues).endDate"
+              :issues="sub_project_issue.sub_issues"
+              :act_depth="act_depth+1"
+            />
+          </template>
+        </div>
       </template>
     </div>
   </div>
@@ -47,7 +57,7 @@ import moment from "moment";
 export default {
   mixins: [formatter],
   name: "GanttGroup",
-  props: ["title", "milestones", "start_date", "end_date", "issues", "sub_projects"],
+  props: ["title", "milestones", "start_date", "end_date", "issues", "sub_projects", "act_depth"],
   data() {
     return {
       leftWidth: this.$parent.leftWidth,
@@ -56,22 +66,15 @@ export default {
       rowHeight: this.$parent.rowHeight,
       borderSmall: this.$parent.borderSmall,
       borderFat: this.$parent.borderFat,
-      actDepth: this.$parent.actDepth + 1,
       showSlots: true,
+      showChildSlots: {},
     };
   },
   computed: {
     ...mapState(["timeBeam"]),
-    cssVars() {
-      return {
-        "--leftWidth": this.leftWidth + "px",
-        "--colWidth": this.colWidth + "px",
-        "--rowHeight": this.rowHeight + "px",
-        "--borderSmall": this.borderSmall + "px",
-        "--borderFat": this.borderFat + "px",
-        "--paddingLeft": (this.actDepth - 1) * 12 + "px",
-      };
-    },
+    actDepth:function() {
+      return parseInt(this.act_depth)
+    }
   },
   methods: {
     getStartEndForSubIssues: function (issues) {
@@ -93,23 +96,5 @@ export default {
 </script>
 
 <style scoped>
-.gantt-row {
-  display: block;
-  height: var(--rowHeight);
-  overflow: hidden;
-}
-.left {
-  float: left;
-  width: var(--leftWidth);
-  height: var(--rowHeight);
-  padding-left: var(--paddingLeft);
-  vertical-align: middle;
-  line-height: var(--rowHeight);
-}
-.right {
-  width: calc(100% - var(--leftWidth));
-  float: left;
-  height: var(--rowHeight);
-  position: relative;
-}
+
 </style>

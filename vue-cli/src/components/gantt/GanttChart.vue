@@ -10,6 +10,7 @@
       :end_date="getStartEndForSubIssues(project.issues).endDate"
       :issues="project.issues"
       :sub_projects="project.sub_projects"
+      act_depth=0
     />
       
   </div>

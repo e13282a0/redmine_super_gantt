@@ -1,7 +1,7 @@
 <template>
   <div :style="cssVars" class="gantt-row">
-    <div v-if="!expandable" class="left">{{ name }}</div>
-    <div v-else class="left">
+    <div v-if="!expandable" class="left noicon">{{ name }}</div>
+    <div v-else class="left icon">
         <v-btn icon x-small height="19px" @click="invertValue">
           <v-icon v-if="value" height="18px" width="18px">mdi-chevron-down</v-icon>
           <v-icon v-if="!value">mdi-chevron-right</v-icon>
@@ -29,7 +29,7 @@ import {mapState} from 'vuex';
 import formatter from '../../mixins/formatter.js'
 export default {
   mixins:[formatter],
-  props: ["name", "expandable", "value"],
+  props: ["name", "expandable", "value", "act_depth"],
   name: "GanttRow",
   data() {
     return {
@@ -40,11 +40,13 @@ export default {
       borderSmall: this.$parent.borderSmall,
       borderFat:this.$parent.borderFat,
       startDate: this.$parent.startDate,
-      actDepth: this.$parent.actDepth+1,
     };
   },
   computed: {
     ...mapState(['timeBeam']),
+    actDepth:function() {
+      return parseInt(this.act_depth)
+    },
     cssVars() {
       return {
         "--leftWidth": this.leftWidth + "px",
@@ -52,7 +54,8 @@ export default {
         "--rowHeight": this.rowHeight + "px",
         "--borderSmall": this.borderSmall + "px",
         "--borderFat": this.borderFat + "px",
-        "--paddingLeft" : this.actDepth*12+10+"px"
+        "--paddingLeftIcon" : (this.actDepth*12)+10+"px",
+        "--paddingLeftNoIcon" : (this.actDepth*12)+22+"px",
       };
     },
   },
@@ -76,11 +79,17 @@ export default {
   height: var(--rowHeight);
   overflow: hidden;
 }
+.icon {
+  padding-left:var(--paddingLeftIcon);
+}
+
+.noicon {
+  padding-left:var(--paddingLeftNoIcon);
+}
 .left {
   float: left;
   width: var(--leftWidth);
   height: var(--rowHeight);
-  padding-left: var(--paddingLeft);
   vertical-align: middle;
   line-height: var(--rowHeight);
 }
