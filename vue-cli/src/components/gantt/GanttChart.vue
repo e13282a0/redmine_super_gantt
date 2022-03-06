@@ -9,6 +9,7 @@
       :start_date="getStartEndForSubIssues(project.issues).startDate"
       :end_date="getStartEndForSubIssues(project.issues).endDate"
       :issues="project.issues"
+      :sub_projects="project.sub_projects"
     />
       
   </div>

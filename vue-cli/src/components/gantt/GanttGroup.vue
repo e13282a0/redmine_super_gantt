@@ -1,38 +1,40 @@
 <template>
   <div>
-    <!-- header -->
-    <div :style="cssVars" class="gantt-row">
-      <div class="left">
-        <v-btn icon x-small height="19px" @click="showSlots = !showSlots">
-          <v-icon v-if="showSlots" height="18px" width="18px">mdi-chevron-down</v-icon>
-          <v-icon v-if="!showSlots">mdi-chevron-right</v-icon>
-        </v-btn>
-        {{ title }}
-      </div>
-      <div class="right" ref="right">
-        <div
-          v-for="elm in timeBeam"
-          :key="'col' + elm.startDate"
-          class="col borderTop"
-          :class="[elm.majorSeparator ? 'fatBorderLeft' : 'borderLeft', isToday(elm.startDate) ? 'today' : elm.type == 'day' && isWeekend(elm.startDate) ? 'weekend' : '']"
-        />
-        <gantt-bar :start_date="start_date" :end_date="end_date" />
-        <gantt-time-line :milestones="milestones"></gantt-time-line>
-      </div>
-    </div>
+    <gantt-row :name="title" expandable="1" v-model="showSlots">
+      <gantt-bar :start_date="start_date" :end_date="end_date" />
+      <gantt-time-line :milestones="milestones"></gantt-time-line>
+    </gantt-row>
+
     <!-- content -->
     <div v-if="showSlots && $slots.default">
       <slot />
     </div>
     <!-- auto redered -->
     <div v-else-if="showSlots && issues.length > 0">
+      <!-- draw child issues -->
       <template v-for="issue in issues">
         <!-- issue is a leave -->
         <gantt-row v-if="issue.sub_issues.length === 0" :key="'issue' + issue.id" :name="issue.subject">
           <gantt-bar :start_date="issue.start_date" :end_date="issue.due_date" />
         </gantt-row>
         <!-- issue is a node -->
-        <gantt-group v-else :key="'issue' + issue.id" :title="issue.subject" :start_date="getStartEndForSubIssues(issue.sub_issues).startDate" :end_date="getStartEndForSubIssues(issue.sub_issues).endDate" :issues="issue.sub_issues" />
+        <gantt-group v-else :key="'group' + issue.id" :title="issue.subject" :start_date="getStartEndForSubIssues(issue.sub_issues).startDate" :end_date="getStartEndForSubIssues(issue.sub_issues).endDate" :issues="issue.sub_issues" />
+      </template>
+
+      <!-- draw sub projects -->
+      <template v-for="sub_project in sub_projects">
+        <gantt-row :key="'project' + sub_project.id" :name="sub_project.name" expandable="1" v-model="showSlots">
+          <gantt-bar :start_date="start_date" :end_date="end_date" />
+          <gantt-time-line :milestones="milestones"></gantt-time-line>
+        </gantt-row>
+        <template v-for="sub_project_issue in sub_project.issues">
+          <!-- issue is a leave -->
+          <gantt-row v-if="sub_project_issue.sub_issues.length === 0" :key="'issue' + sub_project_issue.id" :name="sub_project_issue.subject">
+            <gantt-bar :start_date="sub_project_issue.start_date" :end_date="sub_project_issue.due_date" />
+          </gantt-row>
+          <!-- issue is a node -->
+          <gantt-group v-else :key="'group' + sub_project_issue.id" :title="sub_project_issue.subject" :start_date="getStartEndForSubIssues(sub_project_issue.sub_issues).startDate" :end_date="getStartEndForSubIssues(sub_project_issue.sub_issues).endDate" :issues="sub_project_issue.sub_issues" />
+        </template>
       </template>
     </div>
   </div>
@@ -41,11 +43,11 @@
 <script>
 import { mapState } from "vuex";
 import formatter from "../../mixins/formatter.js";
-import moment from 'moment'
+import moment from "moment";
 export default {
   mixins: [formatter],
   name: "GanttGroup",
-  props: ["title", "milestones", "start_date", "end_date", "issues"],
+  props: ["title", "milestones", "start_date", "end_date", "issues", "sub_projects"],
   data() {
     return {
       leftWidth: this.$parent.leftWidth,
@@ -67,21 +69,21 @@ export default {
         "--rowHeight": this.rowHeight + "px",
         "--borderSmall": this.borderSmall + "px",
         "--borderFat": this.borderFat + "px",
-        "--paddingLeft" : (this.actDepth-1)*12+"px"
+        "--paddingLeft": (this.actDepth - 1) * 12 + "px",
       };
     },
   },
   methods: {
     getStartEndForSubIssues: function (issues) {
       function _flatIssues(_issues) {
-        let result=[];
-        _issues.forEach(_issue => {
+        let result = [];
+        _issues.forEach((_issue) => {
           result.push(_issue);
-          result = result.concat(_flatIssues(_issue.sub_issues))
+          result = result.concat(_flatIssues(_issue.sub_issues));
         });
         return result;
       }
-      let allIssues = _flatIssues(issues)
+      let allIssues = _flatIssues(issues);
       let start = allIssues.reduce((prev, curr) => (moment(prev.start_date) < moment(curr.start_date) ? prev : curr));
       let end = allIssues.reduce((prev, curr) => (moment(prev.due_date) > moment(curr.due_date) ? prev : curr));
       return { startDate: start.start_date, endDate: end.due_date };

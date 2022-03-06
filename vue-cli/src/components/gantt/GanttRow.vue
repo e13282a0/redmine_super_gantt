@@ -1,6 +1,14 @@
 <template>
   <div :style="cssVars" class="gantt-row">
-    <div class="left">{{ name }}</div>
+    <div v-if="!expandable" class="left">{{ name }}</div>
+    <div v-else class="left">
+        <v-btn icon x-small height="19px" @click="invertValue">
+          <v-icon v-if="value" height="18px" width="18px">mdi-chevron-down</v-icon>
+          <v-icon v-if="!value">mdi-chevron-right</v-icon>
+        </v-btn>
+        {{ name }}
+      </div>
+
     <div class="right" ref="right">
       <div
         v-for="elm in timeBeam"
@@ -21,7 +29,7 @@ import {mapState} from 'vuex';
 import formatter from '../../mixins/formatter.js'
 export default {
   mixins:[formatter],
-  props: ["name"],
+  props: ["name", "expandable", "value"],
   name: "GanttRow",
   data() {
     return {
@@ -49,6 +57,9 @@ export default {
     },
   },
   methods: {
+    invertValue () {
+      this.$emit('input', !this.value)
+    },
     onDrop(evt, list) {
       //const itemID = evt.dataTransfer.getData("itemID");
       console.log(list);
