@@ -1,35 +1,44 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import axios from "axios";
+//import VueAxios from "vue-axios";
 
 Vue.use(Vuex);
-import moment from 'moment'
+import moment from "moment";
 export default new Vuex.Store({
   state: {
-    timeBeam:[]
+    timeBeam: [],
+    projects: [],
+    isInit:{
+      projects:false
+    }
   },
   getters: {
-    getTimeBeamIndexByDate:(state) => (date) => {
+    getTimeBeamIndexByDate: (state) => (date) => {
       return state.timeBeam.findIndex(function (elm) {
         return elm.startDate >= moment(date).startOf("day");
       });
     },
-    getTimeBeamPositionByDate:(state) => (date,width) => {
+    getTimeBeamPositionByDate: (state) => (date, width) => {
       let index = state.timeBeam.findIndex(function (elm) {
         return elm.startDate >= moment(date).startOf("day");
       });
-      if (index === -1)
-      return {'index':-1, 'offset':0};
- 
-      let timeSpan = Math.round(state.timeBeam[index].endDate.diff(state.timeBeam[index].startDate, 'minutes'));
-      let minutes = moment(date).diff(state.timeBeam[index].startDate, 'minutes');
-      let offset = Math.round(width*((minutes/timeSpan)));
+      if (index === -1) return { index: -1, offset: 0 };
+
+      let timeSpan = Math.round(state.timeBeam[index].endDate.diff(state.timeBeam[index].startDate, "minutes"));
+      let minutes = moment(date).diff(state.timeBeam[index].startDate, "minutes");
+      let offset = Math.round(width * (minutes / timeSpan));
       // eslint-disable-next-line
       //debugger;
-      return {'index':index, 'offset':offset};
-    }
+      return { index: index, offset: offset };
+    },
   },
   mutations: {
-    makeTimeBeam: function (state, config={ days:35, weeks:48, months:12}) {
+    setProjects(state, projects) {
+      state.projects = projects;
+      state.isInit.projects=true;
+    },
+    makeTimeBeam: function (state, config = { days: 35, weeks: 48, months: 12 }) {
       let days = config.days;
       let weeks = config.weeks;
       let months = config.weeks;
@@ -76,10 +85,7 @@ export default new Vuex.Store({
       // months
       for (let i = 0; i < months; i++) {
         let _startDate = moment(startRegMonth).add(i, "month").startOf("month");
-        let _endDate = moment(startRegMonth)
-          .add(i, "month")
-          .endOf("month")
-          .endOf("day");
+        let _endDate = moment(startRegMonth).add(i, "month").endOf("month").endOf("day");
         result.push({
           type: "month",
           startDate: _startDate,
@@ -93,17 +99,20 @@ export default new Vuex.Store({
         let elm = result[index];
         let prevElm = result[index - 1];
 
-        elm.newWeek =
-          index === 0 || elm.startDate.isoWeek() != prevElm.startDate.isoWeek();
-        elm.newMonth =
-          index === 0 || elm.startDate.month() != prevElm.startDate.month();
-        elm.newYear =
-          index === 0 || elm.startDate.year() != prevElm.startDate.year();
+        elm.newWeek = index === 0 || elm.startDate.isoWeek() != prevElm.startDate.isoWeek();
+        elm.newMonth = index === 0 || elm.startDate.month() != prevElm.startDate.month();
+        elm.newYear = index === 0 || elm.startDate.year() != prevElm.startDate.year();
 
-        state.timeBeam= result;
+        state.timeBeam = result;
       }
     },
   },
-  actions: {},
+  actions: {
+    initProjects({ commit }) {
+      axios.get("/super_gantt/api/index").then((response) => {
+        commit("setProjects", response.data);
+      });
+    },
+  },
   modules: {},
 });
