@@ -1,29 +1,39 @@
 class SuperGanttController < ApplicationController
 
   def index
-
   end
 
   def api_index
     top_level_projects = Project.where(:parent_id => nil, :status => 1).to_a()
     @result = []
     top_level_projects.each_with_index do |top_level_project, i|  
-     project_entry = Hash.new
-     top_level_issues = Issue.where( :project_id => top_level_project.id, :parent_id => nil)
-     project_entry = top_level_project.attributes
-     project_entry["issues"]= make_nodes(top_level_issues)
-     versions = Version.where(:project_id => top_level_project.id)
-     project_entry["milesstones"] = versions.map(&:attributes)
-     #sub_projects = Project.where(:parent_id => top_level_project.id, status => 1).to_a()
+     project_entry = make_project_entry(top_level_project)
      @result.push(project_entry)
     end
     render json: @result
   end
 
+
   def get
   end
 
   def update
+  end
+
+  def make_project_entry(project)
+    project_entry = Hash.new
+    top_level_issues = Issue.where( :project_id => project.id)
+    project_entry = project.attributes
+    project_entry["issues"]= make_nodes(top_level_issues)
+    versions = Version.where(:project_id => project.id)
+    project_entry["milesstones"] = versions.map(&:attributes)
+    project_entry["sub_projects"]=[]
+    sub_projects = Project.where(:parent_id => project.id).to_a()
+    sub_projects.each_with_index do |sub_project, i| 
+      project_entry["sub_projects"].push(make_project_entry(sub_project))
+    end
+
+    return project_entry
   end
 
 
