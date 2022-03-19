@@ -5,6 +5,9 @@
     draggable
     @dragstart="startDrag($event, start)"
   >
+  <v-icon small style="position:absolute; left:0px">mdi-rhombus</v-icon>
+  <v-icon style="position:absolute; right:0px">mdi-rhombus</v-icon>
+ 
   </div>
 </template>
 
@@ -12,7 +15,7 @@
 import {mapState, mapGetters} from 'vuex';
 import moment from 'moment'
 export default {
-  props: ["start_date", "end_date"],
+  props: ["start_date", "end_date", "type"],
   name: "GanttBar",
   data() {
     return {
@@ -59,7 +62,7 @@ export default {
 .bar {
   z-index: 9;
   background-color: rgb(128, 128, 247);
-  border: 1px solid #d3d3d3;
+  /*border: 1px solid #d3d3d3;*/
   text-align: center;
   cursor: move;
   top: var(--top);
