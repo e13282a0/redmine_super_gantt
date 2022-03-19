@@ -34,12 +34,14 @@ export default {
     cssVars() {
       let left = Math.max((this.start.index * this.colWidth)+this.start.offset,0);
       let width = Math.max(((this.end.index - this.start.index) * this.colWidth)+this.end.offset-this.start.offset,0);
+      let barHeight = this.rowHeight -6;
       return {
         "--startIndex": this.start.index,
         "--endIndex": this.end.index,
         "--left": left  + "px",
         "--width": width  + "px",
-        "--height": this.rowHeight - 3 + "px",
+        "--top" : (this.rowHeight- barHeight)/2 +"px",
+        "--height": barHeight + "px",
       };
     },
   },
@@ -60,7 +62,7 @@ export default {
   border: 1px solid #d3d3d3;
   text-align: center;
   cursor: move;
-  top: 2px;
+  top: var(--top);
   left: var(--left);
   height: var(--height);
   width: var(--width);
