@@ -1,7 +1,7 @@
 <template>
   <div>
     <gantt-row :name="title" expandable="1" v-model="showSlots" :act_depth="actDepth">
-      <gantt-bar :start_date="start_date" :end_date="end_date" />
+      <gantt-bar :start_date="start_date" :end_date="end_date" type="sum"/>
       <gantt-time-line :milestones="milestones"></gantt-time-line>
     </gantt-row>
 
@@ -24,7 +24,7 @@
       <!-- draw sub projects -->
       <template v-for="sub_project in sub_projects">
         <gantt-row :key="'project' + sub_project.id" :name="sub_project.name" expandable="1" v-model="showChildSlots[sub_project.id]" :act_depth="actDepth+1">
-          <gantt-bar :start_date="start_date" :end_date="end_date" />
+          <gantt-bar :start_date="start_date" :end_date="end_date" type="sum"/>
           <gantt-time-line :milestones="milestones"></gantt-time-line>
         </gantt-row>
         <div :key="'sub_issues' + sub_project.id" v-if="showChildSlots[sub_project.id] && sub_project.issues.length > 0">
