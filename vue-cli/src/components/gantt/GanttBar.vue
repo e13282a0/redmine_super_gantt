@@ -92,7 +92,8 @@ export default {
 }
 
 .bar {
-  z-index: 9;
+  /*background-color: rgb(128, 128, 247, 0.5);*/
+  z-index: 8;
   top: var(--top);
   left: var(--left);
   height: var(--height);

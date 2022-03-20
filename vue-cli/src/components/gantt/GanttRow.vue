@@ -1,12 +1,12 @@
 <template>
   <div :style="cssVars" class="gantt-row">
-    <div v-if="!expandable" class="left noicon">{{ name }}</div>
+    <div v-if="!expandable" class="left noicon"><a :href="link" target="_bank">{{ name }}</a></div>
     <div v-else class="left icon">
         <v-btn icon x-small height="19px" @click="invertValue">
           <v-icon v-if="value" height="18px" width="18px">mdi-chevron-down</v-icon>
           <v-icon v-if="!value">mdi-chevron-right</v-icon>
         </v-btn>
-        {{ name }}
+        <a :href="link" target="_bank">{{ name }}</a>
       </div>
 
     <div class="right" ref="right">
@@ -29,7 +29,7 @@ import {mapState} from 'vuex';
 import formatter from '../../mixins/formatter.js'
 export default {
   mixins:[formatter],
-  props: ["name", "expandable", "value", "act_depth"],
+  props: ["name", "expandable", "value", "act_depth", "link"],
   name: "GanttRow",
   data() {
     return {

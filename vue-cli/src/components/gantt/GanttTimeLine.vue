@@ -5,7 +5,7 @@
         <v-icon small>mdi-rhombus</v-icon>
       </div>
       <div class="milestone-caption" :key="'caption' + milestone.name" :style="getCssVars(milestone.effective_date)">
-        {{ milestone.name }}
+        <a :href="'versions/'+milestone.id" target="_blank">{{ milestone.name }}</a>
       </div>
     </template>
     <!--<div class="signBar" :style="barCssVars" />-->

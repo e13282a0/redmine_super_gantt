@@ -11,6 +11,7 @@
       :issues="project.issues"
       :sub_projects="project.sub_projects"
       act_depth=0
+      :link = "'projects/'+project.name"
     />
       
   </div>

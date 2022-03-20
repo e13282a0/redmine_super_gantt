@@ -57,16 +57,11 @@ class SuperGanttController < ApplicationController
       result_elm["pending"] = result_elm["due_date"] <= Date.today
       result_elm["due_date"] = result_elm["pending"] ? Date.today : result_elm["due_date"]
 
-
-      #hour_diff = _issue.total_estimated_hours != nil ? _issue.total_estimated_hours - _issue.total_spent_hours : 0
-      #calc_due_date = hour_diff > 0 ? Date.today + (hour_diff) / 7 : nil
-      #result_elm["due_date"] = result_elm["due_date"] == nil ? calc_due_date == nil ? result_elm["start_date"] : calc_due_date : result_elm["due_date"]
-      #result_elm["due_date"] = result_elm["due_date"] < Date.today ? Date.today + 1 : result_elm["due_date"]
-
       #additional infos
       result_elm["spent_hours"] = _issue.spent_hours
       result_elm["total_spent_hours"] = _issue.total_spent_hours
       result_elm["total_estimated_hours"] = _issue.total_estimated_hours
+
       result_elm["fixed_version"] = _issue.fixed_version
       children = get_child_issues(_issue.id)
       result_elm["sub_issues"] = children.to_a.length > 0 ? make_nodes(children) : []
@@ -78,4 +73,5 @@ class SuperGanttController < ApplicationController
   def get_child_issues(issue_id)
     Issue.where(:parent_id => issue_id)
   end
+
 end
