@@ -8,7 +8,9 @@ import moment from "moment";
 export default new Vuex.Store({
   state: {
     timeBeam: [],
+    projectList: [],
     projects: [],
+    loadingStatus:0,
     isInit:{
       projects:false
     }
@@ -35,11 +37,25 @@ export default new Vuex.Store({
     },
   },
   mutations: {
+    addProject(state,  data) {
+      state.projects.push(data)
+    },
+    setProjectList(state, data) {
+      state.projectList = data;
+    },
     setProjects(state, projects) {
       state.projects = projects;
+    },
+    setProjectsInit(state) {
       state.isInit.projects=true;
     },
-    makeTimeBeam: function (state, config = { days: 35, weeks: 48, months: 12 }) {
+    resetLoadingStatus(state) {
+      state.loadingStatus = 0;
+    },
+    addLoadingStatus(state, val) {
+      state.loadingStatus += val;
+    },
+    makeTimeBeam(state, config = { days: 35, weeks: 48, months: 12 }) {
       let days = config.days;
       let weeks = config.weeks;
       let months = config.weeks;
@@ -110,8 +126,23 @@ export default new Vuex.Store({
   },
   actions: {
     initProjects({ commit }) {
-      axios.get("/super_gantt/api/index").then((response) => {
-        commit("setProjects", response.data);
+      commit("resetLoadingStatus")
+      axios.get("/super_gantt/api/projects").then((response) => {
+        let projectList=response.data
+        let step= 100/projectList.length;
+        commit("setProjectList", projectList);
+        let projectPromises = []
+        projectList.forEach(projectElm => {
+          projectPromises.push(
+            axios.get("/super_gantt/api/projects/"+projectElm.id).then((response) => {
+              commit("addProject", response.data);
+              commit("loadingStatus",step)
+            })
+          )
+        });
+        Promise.all(projectPromises).then(() => {
+          commit("setProjectsInit")
+        });
       });
     },
   },

@@ -2,8 +2,9 @@
   <div id="app">
     <v-app>
       <v-main>
-        <v-progress-linear indeterminate v-if="!isInit.projects"></v-progress-linear>
-
+        <v-progress-linear v-model="loadingStatus" height="25" v-if="!isInit.projects">
+          <strong>{{ Math.ceil(loadingStatus) }}%</strong>
+        </v-progress-linear>
         <gantt-chart v-else> </gantt-chart>
       </v-main>
     </v-app>
@@ -15,14 +16,12 @@ import { mapActions, mapState } from "vuex";
 export default {
   name: "App",
   data() {
-    return {
-
-    };
+    return {};
   },
   computed: {
-    ...mapState(["isInit"]),
+    ...mapState(["isInit", "loadingStatus"]),
   },
-  methods:{
+  methods: {
     ...mapActions(["initProjects"]),
   },
   mounted() {
