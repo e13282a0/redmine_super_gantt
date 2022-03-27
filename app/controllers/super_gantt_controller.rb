@@ -4,12 +4,14 @@ class SuperGanttController < ApplicationController
 
   def api_index
     top_level_projects = Project.where(:parent_id => nil, :status => 1).to_a()
-    @result = []
-    top_level_projects.each_with_index do |top_level_project, i|
-      project_entry = make_project_entry(top_level_project)
-      @result.push(project_entry)
-    end
+    @result = top_level_projects.map(&:attributes)
     render json: @result
+  end
+
+  def api_project
+    project = make_project_entry(params[:id])
+    #render json: @project
+    render json: project
   end
 
   def get
@@ -18,20 +20,20 @@ class SuperGanttController < ApplicationController
   def update
   end
 
-  def make_project_entry(project)
-    project_entry = Hash.new
-    top_level_issues = Issue.where(:project_id => project.id, :parent_id => nil)
-    project_entry = project.attributes
-    project_entry["issues"] = make_nodes(top_level_issues)
-    versions = Version.where(:project_id => project.id)
-    project_entry["milestones"] = versions.map(&:attributes)
-    project_entry["sub_projects"] = []
-    sub_projects = Project.where(:parent_id => project.id).to_a()
+  def make_project_entry(project_id)
+    project = Project.find(project_id).attributes.to_h()
+    top_level_issues = Issue.where(:project_id => project_id, :parent_id => nil)
+    
+    project["issues"] = make_nodes(top_level_issues)
+    versions = Version.where(:project_id => project_id)
+    project["milestones"] = versions.map(&:attributes)
+    project["sub_projects"] = []
+    sub_projects = Project.where(:parent_id => project_id).to_a()
     sub_projects.each_with_index do |sub_project, i|
-      project_entry["sub_projects"].push(make_project_entry(sub_project))
+      project["sub_projects"].push(make_project_entry(sub_project.id))
     end
 
-    return project_entry
+    return project
   end
 
   def make_nodes(_issues)
