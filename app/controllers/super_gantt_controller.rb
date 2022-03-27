@@ -4,8 +4,8 @@ class SuperGanttController < ApplicationController
 
   def api_index
     top_level_projects = Project.where(:parent_id => nil, :status => 1).to_a()
-    @result = top_level_projects.map(&:attributes)
-    render json: @result
+    result = top_level_projects.map(&:attributes)
+    render json: result
   end
 
   def api_project
