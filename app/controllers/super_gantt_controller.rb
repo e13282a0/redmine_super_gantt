@@ -16,9 +16,6 @@ class SuperGanttController < ApplicationController
       result.push(result_elm)
     end
 
-
-
-    #result = top_level_projects.map(&:attributes)
     render json: result
   end
 
