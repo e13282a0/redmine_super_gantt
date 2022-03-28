@@ -33,8 +33,9 @@ class SuperGanttController < ApplicationController
 
   def make_project_entry(project_id)
     project = Project.find(project_id).attributes.to_h()
-    top_level_issues = Issue.where(:project_id => project_id, :parent_id => nil)
-    
+    top_level_issues = Issue.where(:project_id => project_id, :parent_id => nil).order("closed_on DESC, status_id ASC, start_date ASC, due_date ASC")
+    #top_level_issues = top_level_issues.sort_by(&:status_id)
+
     project["issues"] = make_nodes(top_level_issues)
     versions = Version.where(:project_id => project_id)
     project["milestones"] = versions.map(&:attributes)
@@ -49,17 +50,19 @@ class SuperGanttController < ApplicationController
 
   def make_nodes(_issues)
     result = []
-    _issues_sorted = _issues.sort_by(&:status_id)
-    _issues_sorted.each_with_index do |_issue, i|
+    _issues.each_with_index do |_issue, i|
       result_elm = _issue.attributes
       total_estimated_hours = _issue.total_estimated_hours
       total_spent_hours = _issue.total_spent_hours
       fixed_version = _issue.fixed_version
       parent_due_date = _issue.parent.blank? ? nil : _issue.parent.due_date
+      closed_on = _issue.closed_on
 
       # set due date
       if result_elm["due_date"] == nil  # no due date
-        if total_estimated_hours != nil # there is an hour estimation
+        if closed_on != nil
+          result_elm["due_date"] = closed_on
+        elsif total_estimated_hours != nil # there is an hour estimation
           remaining_hours = total_estimated_hours - total_spent_hours
           result_elm["due_date"] = Date.today + (remaining_hours / 7) # calculate due date
         elsif fixed_version != nil && fixed_version.effective_date != nil # there is an assigned version
@@ -78,6 +81,8 @@ class SuperGanttController < ApplicationController
       result_elm["spent_hours"] = _issue.spent_hours
       result_elm["total_spent_hours"] = total_spent_hours
       result_elm["total_estimated_hours"] = total_estimated_hours
+      result_elm["css_classes"] = _issue.css_classes
+
 
       result_elm["fixed_version"] = fixed_version
       children = get_child_issues(_issue.id)
@@ -88,7 +93,7 @@ class SuperGanttController < ApplicationController
   end
 
   def get_child_issues(issue_id)
-    Issue.where(:parent_id => issue_id, :closed_on => nil)
+    Issue.where(:parent_id => issue_id, :closed_on => nil).order("status_id ASC, start_date ASC, due_date ASC")
   end
 
 end

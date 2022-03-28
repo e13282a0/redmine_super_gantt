@@ -14,7 +14,7 @@
       <!-- draw child issues -->
       <template v-for="issue in issues">
         <!-- issue is a leave -->
-        <gantt-row v-if="issue.sub_issues.length === 0" :key="'issue' + issue.id" :name="issue.subject" :act_depth="actDepth+1" :link="'issues/'+issue.id">
+        <gantt-row v-if="issue.sub_issues.length === 0" :key="'issue' + issue.id" :name="issue.subject" :act_depth="actDepth+1" :link="'issues/'+issue.id"  >
           <gantt-bar :start_date="issue.start_date" :end_date="issue.due_date" />
         </gantt-row>
         <!-- issue is a node -->
@@ -30,7 +30,7 @@
         <div :key="'sub_issues' + sub_project.id" v-if="showChildSlots[sub_project.id] && sub_project.issues.length > 0">
           <template v-for="sub_project_issue in sub_project.issues">
             <!-- issue is a leave -->
-            <gantt-row v-if="sub_project_issue.sub_issues.length === 0" :key="'issue' + sub_project_issue.id" :name="sub_project_issue.subject" :act_depth="actDepth+1" :link="'issues/'+sub_project_issue.id">
+            <gantt-row v-if="sub_project_issue.sub_issues.length === 0" :key="'issue' + sub_project_issue.id" :name="sub_project_issue.subject" :act_depth="actDepth+1" :link="'issues/'+sub_project_issue.id" >
               <gantt-bar :start_date="sub_project_issue.start_date" :end_date="sub_project_issue.due_date" />
             </gantt-row>
             <!-- issue is a node -->
@@ -67,7 +67,7 @@ export default {
       rowHeight: this.$parent.rowHeight,
       borderSmall: this.$parent.borderSmall,
       borderFat: this.$parent.borderFat,
-      showSlots: true,
+      showSlots: false,
       showChildSlots: {},
     };
   },
