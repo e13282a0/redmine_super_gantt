@@ -4,6 +4,7 @@ class SuperGanttController < ApplicationController
 
   def api_index
     top_level_projects = Project.where(:parent_id => nil, :status => 1).to_a()
+
     result = top_level_projects.map(&:attributes)
     render json: result
   end
@@ -41,16 +42,20 @@ class SuperGanttController < ApplicationController
     _issues_sorted = _issues.sort_by(&:status_id)
     _issues_sorted.each_with_index do |_issue, i|
       result_elm = _issue.attributes
+      total_estimated_hours = _issue.total_estimated_hours
+      total_spent_hours = _issue.total_spent_hours
+      fixed_version = _issue.fixed_version
+      parent_due_date = _issue.parent.blank? ? nil : _issue.parent.due_date
 
       # set due date
       if result_elm["due_date"] == nil  # no due date
-        if _issue.total_estimated_hours != nil # there is an hour estimation
-          remaining_hours = _issue.total_estimated_hours - _issue.total_spent_hours
+        if total_estimated_hours != nil # there is an hour estimation
+          remaining_hours = total_estimated_hours - total_spent_hours
           result_elm["due_date"] = Date.today + (remaining_hours / 7) # calculate due date
-        elsif _issue.fixed_version != nil && _issue.fixed_version.effective_date != nil # there is an assigned version
-          result_elm["due_date"] = _issue.fixed_version.effective_date #take due date of version
-        elsif _issue.parent != nil && _issue.parent.due_date != nil # is there a parent task with a due date
-        result_elm["due_date"] = _issue.parent.due_date # use due date of parent
+        elsif fixed_version != nil && fixed_version.effective_date != nil # there is an assigned version
+          result_elm["due_date"] = fixed_version.effective_date #take due date of version
+        elsif _issue.parent != nil && parent_due_date != nil # is there a parent task with a due date
+        result_elm["due_date"] = parent_due_date # use due date of parent
         else # no idea what to do
           result_elm["due_date"] = Date.today #set due date to today
         end
@@ -61,10 +66,10 @@ class SuperGanttController < ApplicationController
 
       #additional infos
       result_elm["spent_hours"] = _issue.spent_hours
-      result_elm["total_spent_hours"] = _issue.total_spent_hours
-      result_elm["total_estimated_hours"] = _issue.total_estimated_hours
+      result_elm["total_spent_hours"] = total_spent_hours
+      result_elm["total_estimated_hours"] = total_estimated_hours
 
-      result_elm["fixed_version"] = _issue.fixed_version
+      result_elm["fixed_version"] = fixed_version
       children = get_child_issues(_issue.id)
       result_elm["sub_issues"] = children.to_a.length > 0 ? make_nodes(children) : []
       result.push(result_elm)
@@ -73,7 +78,7 @@ class SuperGanttController < ApplicationController
   end
 
   def get_child_issues(issue_id)
-    Issue.where(:parent_id => issue_id)
+    Issue.where(:parent_id => issue_id, :closed_on => nil)
   end
 
 end

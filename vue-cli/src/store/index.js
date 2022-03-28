@@ -10,9 +10,9 @@ export default new Vuex.Store({
     timeBeam: [],
     projectList: [],
     projects: [],
-    loadingStatus:0,
-    isInit:{
-      projects:false
+    loadingStatus: 0,
+    isInit: {
+      projects: false
     }
   },
   getters: {
@@ -37,7 +37,7 @@ export default new Vuex.Store({
     },
   },
   mutations: {
-    addProject(state,  data) {
+    addProject(state, data) {
       state.projects.push(data)
     },
     setProjectList(state, data) {
@@ -47,7 +47,7 @@ export default new Vuex.Store({
       state.projects = projects;
     },
     setProjectsInit(state) {
-      state.isInit.projects=true;
+      state.isInit.projects = true;
     },
     resetLoadingStatus(state) {
       state.loadingStatus = 0;
@@ -128,15 +128,20 @@ export default new Vuex.Store({
     initProjects({ commit }) {
       commit("resetLoadingStatus")
       axios.get("/super_gantt/api/projects").then((response) => {
-        let projectList=response.data
-        let step= 100/projectList.length;
+        let projectList = response.data
+        let step = 100 / projectList.length;
         commit("setProjectList", projectList);
         let projectPromises = []
-        projectList.forEach(projectElm => {
+
+        const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+        projectList.forEach((projectElm, index) => {
+
           projectPromises.push(
-            axios.get("/super_gantt/api/projects/"+projectElm.id).then((response) => {
-              commit("addProject", response.data);
-              commit("loadingStatus",step)
+            wait(index * 750).then(() => {
+              axios.get("/super_gantt/api/projects/" + projectElm.id).then((response) => {
+                commit("addProject", response.data);
+                commit("addLoadingStatus", step)
+              })
             })
           )
         });

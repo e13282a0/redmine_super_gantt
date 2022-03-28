@@ -48,8 +48,8 @@ export default {
         return result;
       }
       let allIssues = _flatIssues(issues)
-      let start = allIssues.reduce((prev, curr) => (moment(prev.start_date) < moment(curr.start_date) ? prev : curr));
-      let end = allIssues.reduce((prev, curr) => (moment(prev.due_date) > moment(curr.due_date) ? prev : curr));
+      let start = allIssues.reduce((prev, curr) => (moment(prev.start_date) < moment(curr.start_date) ? prev : curr), Date.now());
+      let end = allIssues.reduce((prev, curr) => (moment(prev.due_date) > moment(curr.due_date) ? prev : curr), Date.now());
       return { startDate: start.start_date, endDate: end.due_date };
     },
   },
