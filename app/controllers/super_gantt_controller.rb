@@ -4,8 +4,21 @@ class SuperGanttController < ApplicationController
 
   def api_index
     top_level_projects = Project.where(:parent_id => nil, :status => 1).to_a()
+    project_custom_fields = CustomField.where(:type => "ProjectCustomField")
+    #project_custom_value = CustomValues.where(:customized_type =>"Project")
+    result=[]
+    top_level_projects.each do |top_level_project|
+      result_elm = top_level_project.attributes
+      project_custom_fields.each do |project_custom_field|
+        custom_field = CustomValue.find_by(:customized_id => top_level_project.id, :custom_field_id=>project_custom_field.id)
+        result_elm[project_custom_field.name] = custom_field.blank? ? nil : custom_field.value
+      end
+      result.push(result_elm)
+    end
 
-    result = top_level_projects.map(&:attributes)
+
+
+    #result = top_level_projects.map(&:attributes)
     render json: result
   end
 
