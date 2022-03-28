@@ -35,6 +35,7 @@ export default new Vuex.Store({
       //debugger;
       return { index: index, offset: offset };
     },
+
   },
   mutations: {
     addProject(state, data) {
@@ -129,12 +130,19 @@ export default new Vuex.Store({
       commit("resetLoadingStatus")
       axios.get("/super_gantt/api/projects").then((response) => {
         let projectList = response.data
+
+        let filteredList = projectList.filter(project => {
+
+          return project["Internal Project Status"] === "In Arbeit" && project["Type"] === "Standard"
+        })
+        
+
         let step = 100 / projectList.length;
-        commit("setProjectList", projectList);
+        commit("setProjectList", filteredList);
         let projectPromises = []
 
         const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
-        projectList.forEach((projectElm, index) => {
+        filteredList.forEach((projectElm, index) => {
 
           projectPromises.push(
             wait(index * 750).then(() => {
